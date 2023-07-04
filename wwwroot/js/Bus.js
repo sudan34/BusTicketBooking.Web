@@ -1,23 +1,26 @@
 ﻿var dtable;
 $(document).ready(function () {
     dtable = $('#myTable').DataTable({
-        "ajax": { "url": "Admin/Bus/GetAllBus" },
-        "colums": [
+        "ajax": { "url": "/Admin/Bus/GetAllBus" },
+        "columns": [
 
-        { "data": "busNumber" },
-        { "data": "seatCapacity" },
+            { "data": "busNumber" },
+            { "data": "seatCapacity" },
 
-        {
-            "data": "id",
-            "render": function (data) {
-                return
-                <a href="/Admin/Bus/CreateUpdate?id="${data}"><i class="bi bi - pencil - square"> </i> </a>
-                <a onclick = RemoveProduct("/Admin/Bus/Delete/${data}") <i class="bi bi-trash"> </i> </a>
+            {
+                "data": "id",
+                "render": function (data) {
+                    return
+                    <div class="w-75 btn-group" role="group">
+                    <a href="/Admin/Bus/CreateUpdate?id=" ${data}" class="btn btn - primary btn - sm mx - 1"><i class="bi bi - pencil - square"> </i> </a>
+                            <a onclick=RemoveProduct('/Admin/Bus/Delete/${data}') class="btn btn-danger btn-sm mx-1 > <i class="bi bi-trash-fill"></i> </a >
+                            </div > 
+                },
+                "width": "10%"
             }
-        }
         ]
     });
-});
+}
 function RemoveProduct(url) {
     Swal.fire({
         title: 'Are you sure?',
@@ -25,9 +28,8 @@ function RemoveProduct(url) {
         icon: 'warning',
         showCancelButton: true,
         confirmButtonColor: '#3085d6',
-        cancalButtonColor: '#d33',
+        cancelButtonColor: '#d33',
         confirmButtonText: 'Yes, delete it!'
-
     }).then((result) => {
         if (result.isConfirmed) {
             $.ajax({
@@ -35,13 +37,14 @@ function RemoveProduct(url) {
                 type: 'DELETE',
                 success: function (data) {
                     if (data.success) {
-                        dtable.ajax.reload();
+                        dataTable.ajax.reload();
                         toastr.success(data.message);
-                    } else {
+                    }
+                    else {
                         toastr.error(data.message);
                     }
                 }
-            });
+            })
         }
-    });
+    })
 }

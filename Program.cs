@@ -3,17 +3,18 @@ using Microsoft.EntityFrameworkCore;
 using BusTicketBooking.DataAccess;
 using BusTicketBooking.Models;
 using BusTicketBooking.DataAccess.Repositories;
+using System.Configuration;
+using BusTicketBooking.DataAccess.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
 
-builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseSqlServer(connectionString));
+builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(connectionString));
 
 builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
     .AddEntityFrameworkStores<ApplicationDbContext>();
 
-builder.Services.AddScoped<UnitOfWork, UnitOfWork>();
+builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
 //builder.Services.AddScoped<IDbInitializer, DbInitializer>();
 
