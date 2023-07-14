@@ -10,41 +10,42 @@ $(document).ready(function () {
             {
                 "data": "id",
                 "render": function (data) {
-                    return
+                    return `
                     <div class="w-75 btn-group" role="group">
-                    <a href="/Admin/Bus/CreateUpdate?id=" ${data}" class="btn btn - primary btn - sm mx - 1"><i class="bi bi - pencil - square"> </i> </a>
-                            <a onclick=RemoveProduct('/Admin/Bus/Delete/${data}') class="btn btn-danger btn-sm mx-1 > <i class="bi bi-trash-fill"></i> </a >
-                            </div > 
+                        <a href="/Admin/Bus/CreateUpdate?id=${data}" class="btn btn-primary btn-sm mx-1"><i class="bi bi-pencil-square"></i></a>
+                        <a onclick=RemoveProduct('/Admin/Bus/Delete/${data}') class="btn btn-danger btn-sm mx-1"><i class="bi bi-trash-fill"></i></a>
+                    </div>`
                 },
                 "width": "10%"
             }
         ]
     });
-}
+});
+
 function RemoveProduct(url) {
-    Swal.fire({
-        title: 'Are you sure?',
-        text: "You won't be able to revert this!",
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonColor: '#3085d6',
-        cancelButtonColor: '#d33',
-        confirmButtonText: 'Yes, delete it!'
-    }).then((result) => {
-        if (result.isConfirmed) {
-            $.ajax({
-                url: url,
-                type: 'DELETE',
-                success: function (data) {
-                    if (data.success) {
-                        dataTable.ajax.reload();
-                        toastr.success(data.message);
-                    }
-                    else {
-                        toastr.error(data.message);
-                    }
-                }
-            })
-        }
-    })
+   Swal.fire({
+       title: 'Are you sure?',
+       text: "You won't be able to revert this!",
+       icon: 'warning',
+       showCancelButton: true,
+       confirmButtonColor: '#3085d6',
+       cancelButtonColor: '#d33',
+       confirmButtonText: 'Yes, delete it!'
+   }).then((result) => {
+       if (result.isConfirmed) {
+           $.ajax({
+               url: url,
+               type: 'DELETE',
+               success: function (data) {
+                   if (data.success) {
+                       dtable.ajax.reload();
+                       toastr.success(data.message);
+                   }
+                   else {
+                       toastr.error(data.message);
+                   }
+               }
+           })
+       }
+   })
 }

@@ -5,6 +5,7 @@ using BusTicketBooking.Models;
 using BusTicketBooking.DataAccess.Repositories;
 using System.Configuration;
 using BusTicketBooking.DataAccess.Infrastructure;
+using BusTicketBooking.Utlities;
 
 var builder = WebApplication.CreateBuilder(args);
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
@@ -16,11 +17,12 @@ builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.Requ
 
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
-//builder.Services.AddScoped<IDbInitializer, DbInitializer>();
+builder.Services.AddScoped<IDbInitializer, DbInitializer>();
 
 builder.Services.AddControllersWithViews();
 
 var app = builder.Build();
+DataSeeding();
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
@@ -42,4 +44,14 @@ app.MapControllerRoute(
     name: "default",
     pattern: "{area=Admin}/{controller=Bus}/{action=Index}/{id?}");
 
+app.MapRazorPages();
+
 app.Run();
+void DataSeeding()
+{
+    using (var scope = app.Services.CreateScope())
+    {
+        var DbInitializer = scope.ServiceProvider.GetRequiredService<IDbInitializer>();
+        DbInitializer.Initialize();
+    }
+}

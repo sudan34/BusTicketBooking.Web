@@ -19,6 +19,7 @@ namespace BusTicketBooking.Web.Areas.Admin.Controllers
         #region APICALL
         public IActionResult GetAllBus()
         {
+            //var bus = _unitOfWork.BusRepository.GetAll(includeProperties: "BusNumber,SeatCapacity");
             var bus = _unitOfWork.BusRepository.GetAll();
             return Json(new { data = bus });
         }
